@@ -1,5 +1,6 @@
 <!DOCTYPE html><html lang="id">
 <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- Basic -->
 <meta name="title" content="GL Schedule Checker">
 <meta name="description" content="Make It Ez With EZ! TOOLS.">
@@ -158,6 +159,11 @@ button{
   color:#000000;
   font-size:12px;
 }
+
+#shareBtn{
+  background:#25D366;
+  margin-top:10px;
+}
 </style></head>
 <body class="bg-off"><div class="main">
   <div class="card">
@@ -180,8 +186,12 @@ button{
 
 <div id="result" class="result"></div>
 
+<button id="shareBtn" style="display:none;">Share ke WhatsApp</button>
+
   </div>  <div class="watermark">© AprilhxnProject</div>
 </div><script>
+
+document.getElementById("shareBtn").onclick = shareWA;
 
 // DATA SHIFT
 const pola=["OFF KE 1","OFF KE 2","PAGI KE 1","PAGI KE 2","MALAM KE 1","MALAM KE 2"];
@@ -206,6 +216,42 @@ const liburMap={
 "2026-09-05":"Maulid Nabi",
 "2026-12-25":"Hari Natal"
 };
+
+function shareWA(){
+  const g=document.getElementById("group").value;
+  const tanggal=document.getElementById("date").value;
+
+  const tanggalFormat = formatTanggal(tanggal);
+  const namaHari = getNamaHari(tanggal);
+
+  const sel=new Date(tanggal);
+  const diff=Math.floor((sel-base)/(1000*60*60*24));
+
+  let i=(diff+offset[g])%6;
+  if(i<0)i+=6;
+
+  const shift=pola[i];
+  const namaLibur=liburMap[tanggal];
+  const isLibur=namaLibur!==undefined;
+
+  let text =
+`GL Schedule Checker
+
+Grup : ${g}
+Tanggal : ${namaHari}, ${tanggalFormat}
+Shift : ${icon(shift)} ${shift}
+`;
+
+  if(isLibur){
+    text += `\n🔥 LEMBUR (Hari Libur Nasional) - ${namaLibur}`;
+  }
+
+  text += `\n\n🔥 Checked By EZ! TOOLS.
+  https://schedule-checker.netlify.app/`;
+
+  const url = "https://wa.me/?text=" + encodeURIComponent(text);
+  window.open(url, "_blank");
+}
 
 // AMBIL TANGGAL HARI INI (LOCAL)
 function getTodayLocal(){
@@ -273,6 +319,7 @@ function getLiburStyle(nama){
 function cek(){
  const g=document.getElementById("group").value;
  const tanggal=document.getElementById("date").value;
+ document.getElementById("shareBtn").style.display="block";
  const tanggalFormat = formatTanggal(tanggal);
  const namaHari = getNamaHari(tanggal);
  const res=document.getElementById("result");
