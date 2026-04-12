@@ -1,27 +1,23 @@
 <!DOCTYPE html><html lang="id">
 <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- Basic -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <meta name="title" content="GL Schedule Checker">
 <meta name="description" content="Make It Ez With EZ! TOOLS.">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://schedule-checker.netlify.app/">
 <meta property="og:title" content="GL Schedule Checker">
-<meta property="og:description" content="Make It Ez With EZ! TOOLS.">
-<meta property="og:image" content="https://i.imgur.com/cBKz3YH.jpeg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:site_name" content="GL Schedule Checker">
+<meta property="og:description" content="A quick check designed to help you see your work schedule for the coming month. ">
+<meta property="og:image" content="https://i.imgur.com/fSDPeG9.jpeg">
 
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:title" content="GL Schedule Checker">
-<meta property="twitter:description" content="Make It Ez With EZ! TOOLS.">
-<meta property="twitter:image" content="https://i.imgur.com/cBKz3YH.jpeg">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Schedule Checker</title><style>
+<title>Schedule Checker</title>
+
+<style>
 *{box-sizing:border-box;font-family:Segoe UI,Arial}
+
 body::before{
   content:'';
   position:fixed;
@@ -34,36 +30,34 @@ body::before{
   opacity:0.3;
   z-index:-1;
 }
+
 body{
   margin:0;
+  touch-action: pan-y;
   min-height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
   transition:0.4s;
+  overflow-x:hidden; /* ⬅️ ini penting */
 }
 
-.bg-off{
-  background: linear-gradient(270deg,#e8eaf6,#f3e5f5,#f8f9fa);
-  background-size: 600% 600%;
-  animation: flow 12s ease infinite;
+/* BACKGROUND */
+.bg-off{background: linear-gradient(270deg,#e8eaf6,#f3e5f5,#f8f9fa);background-size:600% 600%;animation: flow 12s ease infinite;}
+.bg-pagi{background: linear-gradient(270deg,#fff3e0,#ffe0b2,#ffecb3);background-size:600% 600%;animation: flow 12s ease infinite;}
+.bg-malam{background: linear-gradient(270deg,#e3f2fd,#e1f5fe,#ede7f6);background-size:600% 600%;animation: flow 12s ease infinite;}
+.main{
+  width:100%;
+  max-width:420px;
+  padding:20px;
+  margin:auto;
 }
 
-.bg-pagi{
-  background: linear-gradient(270deg,#fff3e0,#ffe0b2,#ffecb3);
-  background-size: 600% 600%;
-  animation: flow 12s ease infinite;
+input[type="date"]{
+  padding-left:6%;
+  padding-right:0%;
 }
-
-.bg-malam{
-  background: linear-gradient(270deg,#e3f2fd,#e1f5fe,#ede7f6);
-  background-size: 600% 600%;
-  animation: flow 12s ease infinite;
-}
-
-.main{width:100%;max-width:420px;padding:20px}
-
-/* Glass effect container */
+/* CARD */
 .card{
   background: rgba(255,255,255,0.1);
   backdrop-filter: blur(10px);
@@ -74,20 +68,25 @@ body{
   box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
-h2{text-align:center;margin:0 0 15px;color:#000000}
+h2{text-align:center;margin:0 0 0px;color:#000000}
 .group{margin-top:12px}
-label{font-size:13px;color:#2d3436}
+label{
+  font-size:13px;
+  color:#2d3436;
+  display:block;
+  text-align:center;
+}
 
 select,input{
   width:100%;
+  display:block;
+  text-align: center;
   margin-top:5px;
   padding:10px;
   border-radius:8px;
-
   background: rgba(255,255,255,0.15);
   color:#2d3436;
-
-  border:1px solid rgba(255,255,255,0.3);
+  border:1.5px solid rgba(0,0,0,0.6);
   backdrop-filter: blur(5px);
 }
 
@@ -96,51 +95,25 @@ select:focus,input:focus{
   border:1px solid rgba(255,255,255,0.6);
 }
 
-input[type=\"date\"]{
-  color:#2d3436;
-}
-
 .logo{
-  width:100px;
-  height:100px;
+  width:120px;
+  height:120px;
   margin:0 auto 10px;
-  transition:0.3s;
-
   border-radius:50%;
   background: rgba(0,0,0,0.0) url('logo.png') center/60% no-repeat;
-
-  backdrop-filter: blur(5px);
-  border:0px solid rgba(255,255,255,0.3);
 }
 
-.logo:hover{
-  transform:scale(1.05);
-}
-
-button{
-  width:100%;
-  margin-top:18px;
-  padding:12px;
-  border:none;
-  border-radius:8px;
-  background:#000000;
-  color:#fff;
-  cursor:pointer;
-}
-
+/* RESULT */
 .result{
   margin-top:18px;
   padding:15px;
   border-radius:10px;
-
   background: rgba(255,255,255,0.15);
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-
-  border:1px solid rgba(255,255,255,0.3);
-
+  border:1.5px solid rgba(0,0,0,0.6);
   display:none;
   line-height:1.6;
+  transition:0.3s;
 }
 
 .shift-off{color:#636e72}
@@ -148,140 +121,232 @@ button{
 .shift-malam{color:#0984e3}
 
 .lembur{font-weight:bold;margin-top:5px}
-.libur-nasional{color:#d63031}
-.libur-islam{color:#00b894}
-.libur-internasional{color:#6c5ce7}
-.libur-khusus{color:#fd79a8}
 
 .watermark{
   text-align:center;
   margin-top:10px;
-  color:#000000;
+  color:#000;
   font-size:12px;
 }
 
-#shareBtn{
-  background:#25D366;
-  margin-top:10px;
+button{
+  display:block;
+  width:100%;
+  margin:18px auto 0;
+  padding:12px 20px;
+  border:none;
+  border-radius:8px;
+  background:#000000;
+  color:#fff;
+  cursor:pointer;
 }
-</style></head>
-<body class="bg-off"><div class="main">
-  <div class="card">
-      <div class="logo"></div>
-    <h2>GL SCHEDULE CHECKER V2.2</h2><div class="group">
-  <label>Pilih Grup</label>
-  <select id="group">
-    <option value="A">A</option>
-    <option value="B">B</option>
-    <option value="C">C</option>
-  </select>
+
+#shareBtn{
+  background:#000000;
+  margin-top:10px;
+  color-interpolation: ;
+}
+
+.popup{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+
+  background: linear-gradient(270deg,#e8eaf6,#f3e5f5,#f8f9fa);
+  background-size: 600% 600%;
+  animation: flow 12s ease infinite;
+
+  display:none;
+  justify-content:center;
+  align-items:center;
+
+  z-index:9999;
+}
+
+.popup-content{
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(12px);
+  padding:25px;
+  border-radius:16px;
+  width:90%;
+  max-width:320px;
+  text-align:center;
+  animation: fadeIn 0.4s ease;
+}
+
+.popup-content button{
+  margin-top:15px;
+  background:#000;
+  color:#fff;
+}
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:scale(0.9);
+  }
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+.block-desktop{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:#000;
+  color:#fff;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  z-index:99999;
+}
+
+.block-content{
+  padding:20px;
+}
+
+</style>
+</head>
+
+<body class="bg-off">
+    <div id="blockDesktop" class="block-desktop">
+  <div class="block-content">
+    <h2>⚠️ Akses Ditolak</h2>
+    <p>Website ini hanya dapat dibuka melalui perangkat mobile.</p>
+  </div>
+</div>
+    <div id="tutorialPopup" class="popup">
+  <div class="popup-content">
+    <h3>📌 Cara Menggunakan</h3>
+    <p>
+      1. Pilih grup kerja (A / B / C)<br>
+      2. Pilih tanggal<br>
+      3. Geser layar kiri/kanan untuk ubah tanggal<br>
+      4. Klik "Cek Jadwal" untuk melihat hasil<br><br>
+      🔥 Jika hari libur nasional, maka akan muncul status lembur
+    </p>
+    <button onclick="tutupTutorial()">Mengerti</button>
+  </div>
+</div>
+
+<div class="main">
+<div class="card">
+
+<div class="logo"></div>
+<h2>GL SCHEDULE CHECKER V2.2</h2>
+
+<div class="group">
+<label>PILIH GRUP</label>
+<select id="group">
+<option value="A">A</option>
+<option value="B">B</option>
+<option value="C">C</option>
+</select>
 </div>
 
 <div class="group">
-  <label>PilihTanggal</label>
-  <input type="date" id="date">
+<label>PILIH TANGGAL</label>
+<input type="date" id="date">
 </div>
 
-<button onclick="cek()">Cek Jadwal</button>
+<button onclick="cek()">CEK JADWAL</button>
 
 <div id="result" class="result"></div>
+<button id="shareBtn" style="display:none;">BAGIKAN KE WHATSAPP</button>
 
-<button id="shareBtn" style="display:none;">Share ke WhatsApp</button>
+</div>
 
-  </div>  <div class="watermark">© AprilhxnProject</div>
-</div><script>
+<div class="watermark">© AprilhxnProject</div>
+</div>
 
-document.getElementById("shareBtn").onclick = shareWA;
+<script>
 
-// DATA SHIFT
+function cekDevice(){
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const isSmallScreen = window.innerWidth <= 768;
+
+  // jika bukan HP atau layar terlalu besar
+  if(!isMobile || !isSmallScreen){
+    document.getElementById("blockDesktop").style.display="flex";
+    document.querySelector(".main").style.display="none";
+  }
+}
+
+function tampilkanTutorial(){
+  const sudah = localStorage.getItem("tutorial_sudah");
+
+  if(!sudah){
+    document.getElementById("tutorialPopup").style.display="flex";
+    document.body.style.overflow="hidden"; // ⬅️ lock scroll
+  }
+}
+
+function tutupTutorial(){
+  document.getElementById("tutorialPopup").style.display="none";
+  document.body.style.overflow="auto"; // ⬅️ buka lagi
+  localStorage.setItem("tutorial_sudah","true");
+}
+
+// SWIPE
+let startX=0,endX=0;
+
+document.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
+document.addEventListener("touchend",e=>{
+  endX=e.changedTouches[0].clientX;
+  handleSwipe();
+});
+
+function handleSwipe(){
+  const diff=startX-endX;
+
+  if(Math.abs(diff)>50){
+    document.body.style.transform="scale(0.98)";
+    setTimeout(()=>{document.body.style.transform="scale(1)";},100);
+  }
+
+  if(diff>50)ubahTanggal(1);
+  if(diff<-50)ubahTanggal(-1);
+
+  if(navigator.vibrate){navigator.vibrate(30);}
+}
+
+// DATA
 const pola=["OFF KE 1","OFF KE 2","PAGI KE 1","PAGI KE 2","MALAM KE 1","MALAM KE 2"];
 const offset={A:0,B:2,C:4};
 const base=new Date("2026-04-12");
 
-// HARI LIBUR + KETERANGAN
 const liburMap={
 "2026-01-01":"Tahun Baru",
-"2026-01-17":"Isra Mikraj",
-"2026-02-17":"Imlek",
-"2026-03-19":"Nyepi",
-"2026-03-20":"Idul Fitri",
-"2026-03-21":"Idul Fitri Hari ke-2",
-"2026-04-03":"Wafat Isa Almasih",
-"2026-05-14":"Kenaikan Isa Almasih",
-"2026-05-24":"Waisak",
-"2026-05-27":"Idul Adha",
-"2026-06-01":"Hari Lahir Pancasila",
-"2026-06-17":"Tahun Baru Islam",
-"2026-08-17":"Hari Kemerdekaan RI",
-"2026-09-05":"Maulid Nabi",
-"2026-12-25":"Hari Natal"
+"2026-05-27":"Idul Adha"
 };
 
-function shareWA(){
-  const g=document.getElementById("group").value;
-  const tanggal=document.getElementById("date").value;
-
-  const tanggalFormat = formatTanggal(tanggal);
-  const namaHari = getNamaHari(tanggal);
-
-  const sel=new Date(tanggal);
-  const diff=Math.floor((sel-base)/(1000*60*60*24));
-
-  let i=(diff+offset[g])%6;
-  if(i<0)i+=6;
-
-  const shift=pola[i];
-  const namaLibur=liburMap[tanggal];
-  const isLibur=namaLibur!==undefined;
-
-  let text =
-`GL Schedule Checker
-
-Grup : ${g}
-Tanggal : ${namaHari}, ${tanggalFormat}
-Shift : ${icon(shift)} ${shift}
-`;
-
-  if(isLibur){
-    text += `\n🔥 LEMBUR (Hari Libur Nasional) - ${namaLibur}`;
-  }
-
-  text += `\n\n🔥 Checked By EZ! TOOLS.
-  https://schedule-checker.netlify.app/`;
-
-  const url = "https://wa.me/?text=" + encodeURIComponent(text);
-  window.open(url, "_blank");
-}
-
-// AMBIL TANGGAL HARI INI (LOCAL)
+// UTIL
 function getTodayLocal(){
   const now=new Date();
-  const y=now.getFullYear();
-  const m=String(now.getMonth()+1).padStart(2,'0');
-  const d=String(now.getDate()).padStart(2,'0');
-  return `${y}-${m}-${d}`;
-}
-function getNamaHari(tanggal){
-  const hari = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
-  const d = new Date(tanggal);
-  return hari[d.getDay()];
-}
-function formatTanggal(tanggal){
-  const [tahun, bulan, hari] = tanggal.split("-");
-  return `${hari}-${bulan}-${tahun}`;
+  return now.toISOString().split("T")[0];
 }
 
-// SET DEFAULT + BLOK TANGGAL LAMPAU
+function getNamaHari(t){
+  return ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"][new Date(t).getDay()];
+}
+
+function formatTanggal(t){
+  const [y,m,d]=t.split("-");
+  return `${d}-${m}-${y}`;
+}
+
+// DATE SET
 const input=document.getElementById("date");
 const today=getTodayLocal();
 input.value=today;
-input.setAttribute("min",today);
-
-input.addEventListener("change",function(){
-  if(this.value<today){
-    this.value=today;
-  }
-});
+input.min=today;
 
 // ICON
 function icon(s){
@@ -290,47 +355,28 @@ function icon(s){
  if(s.includes("MALAM"))return"🌙";
 }
 
-// WARNA SHIFT
 function warna(s){
  if(s.includes("OFF"))return"shift-off";
  if(s.includes("PAGI"))return"shift-pagi";
  if(s.includes("MALAM"))return"shift-malam";
 }
 
-// BACKGROUND DINAMIS
+// BG
 function bg(s){
- const body=document.body;
- body.classList.remove("bg-off","bg-pagi","bg-malam");
- if(s.includes("OFF"))body.classList.add("bg-off");
- if(s.includes("PAGI"))body.classList.add("bg-pagi");
- if(s.includes("MALAM"))body.classList.add("bg-malam");
+ const b=document.body;
+ b.classList.remove("bg-off","bg-pagi","bg-malam");
+ if(s.includes("OFF"))b.classList.add("bg-off");
+ if(s.includes("PAGI"))b.classList.add("bg-pagi");
+ if(s.includes("MALAM"))b.classList.add("bg-malam");
 }
 
-// STYLE LIBUR
-function getLiburStyle(nama){
- if(!nama) return "";
- if(nama.includes("Idul")||nama.includes("Islam")||nama.includes("Maulid")) return "libur-islam";
- if(nama.includes("Kemerdekaan")||nama.includes("Pancasila")) return "libur-nasional";
- if(nama.includes("Natal")||nama.includes("Imlek")) return "libur-internasional";
- return "libur-khusus";
-}
-
-// MAIN FUNCTION
+// MAIN
 function cek(){
  const g=document.getElementById("group").value;
  const tanggal=document.getElementById("date").value;
- document.getElementById("shareBtn").style.display="block";
- const tanggalFormat = formatTanggal(tanggal);
- const namaHari = getNamaHari(tanggal);
  const res=document.getElementById("result");
 
- const today=getTodayLocal();
-
- // VALIDASI FINAL (ANTI TANGGAL LAMPAU)
- if(tanggal<today){
-   alert("Tidak bisa cek tanggal sebelumnya!");
-   return;
- }
+ const isToday=(tanggal===getTodayLocal());
 
  const sel=new Date(tanggal);
  const diff=Math.floor((sel-base)/(1000*60*60*24));
@@ -339,20 +385,82 @@ function cek(){
  if(i<0)i+=6;
 
  const shift=pola[i];
- const namaLibur=liburMap[tanggal];
- const isLibur=namaLibur!==undefined;
+ const libur=liburMap[tanggal];
 
  bg(shift);
 
- const styleLibur=getLiburStyle(namaLibur);
-
  res.style.display="block";
+ document.getElementById("shareBtn").style.display="block";
+
+ // animasi fade
+ res.style.opacity="0";
+ setTimeout(()=>{res.style.opacity="1";},100);
+
  res.innerHTML=
- "<b>Grup :</b> "+g+"<br>"+
-"<b>Tanggal :</b> "+namaHari+", "+tanggalFormat+" <br>"+
- "<b>Shift :</b> <span class='"+warna(shift)+"'><b>"+shift+" "+icon(shift)+"</b></span><br>"+
- (isLibur?"<div class='lembur "+styleLibur+"'><b> LEMBUR!🔥  (Hari Libur Nasional) "+namaLibur+"</b></div>":"");
+ `<b>Grup :</b> ${g}<br>
+  <b>Tanggal :</b> ${getNamaHari(tanggal)}, ${formatTanggal(tanggal)}<br>
+  <b>Shift :</b> <span class="${warna(shift)}"><b>${icon(shift)} ${shift}</b></span>
+  ${isToday?`<div><b>📍 Hari Ini</b></div>`:""}
+  ${libur?`<div class="lembur">🔥 LEMBUR (Hari Libur Nasional) - ${libur}</div>`:""}`;
 }
 
-</script></body>
+// SWIPE DATE
+function ubahTanggal(step){
+  const current=new Date(input.value);
+  current.setDate(current.getDate()+step);
+
+  if(current<new Date(today))return;
+
+  input.value=current.toISOString().split("T")[0];
+  cek();
+}
+
+// AUTO LOAD
+window.onload=function(){
+  cekDevice();
+  cek();
+  tampilkanTutorial();
+}
+
+// SHARE
+document.getElementById("shareBtn").onclick = function(){
+
+  const g = document.getElementById("group").value;
+  const tanggal = document.getElementById("date").value;
+
+  const tanggalFormat = formatTanggal(tanggal);
+  const namaHari = getNamaHari(tanggal);
+
+  const sel = new Date(tanggal);
+  const diff = Math.floor((sel - base) / (1000*60*60*24));
+
+  let i = (diff + offset[g]) % 6;
+  if(i < 0) i += 6;
+
+  const shift = pola[i]; // ✅ ambil shift yang benar
+  const namaLibur = liburMap[tanggal];
+  const isLibur = namaLibur !== undefined;
+
+  let text =
+`📅 GL Schedule Checker V2.2
+
+👤 Grup : ${g}
+📆 ${namaHari}, ${tanggalFormat}
+⏰ Shift : ${icon(shift)} ${shift}
+`;
+
+  if(isLibur){
+    text += `\n🔥 LEMBUR (Hari Libur Nasional) - ${namaLibur}`;
+  }
+
+  text += `\n\nCheck Your Schedule In
+https://schedule-checker.netlify.app/
+©AprilhxnProject`;
+
+  const url = "https://wa.me/?text=" + encodeURIComponent(text);
+  window.open(url, "_blank");
+};
+</script>
+
+</body>
 </html>
