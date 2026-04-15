@@ -39,7 +39,8 @@ body{
   justify-content:center;
   align-items:center;
   transition:0.4s;
-  overflow-x:hidden; /* ⬅️ ini penting */
+  overflow-x:hidden;
+  position:relative;/* ⬅️ ini penting */
 }
 
 /* BACKGROUND */
@@ -66,6 +67,7 @@ input[type="date"]{
   border-radius:14px;
   border:1px solid rgba(255,255,255,0.3);
   box-shadow:0 10px 25px rgba(0,0,0,0.2);
+  transition: transform 0.15s ease;
 }
 
 h2{text-align:center;margin:0 0 0px;color:#000000}
@@ -120,7 +122,31 @@ select:focus,input:focus{
 .shift-pagi{color:#e1b12c}
 .shift-malam{color:#0984e3}
 
-.lembur{font-weight:bold;margin-top:5px}
+.lembur{
+  font-weight:bold;
+  margin-top:8px;
+  padding:8px;
+  border-radius:8px;
+
+  background:rgba(255,0,0,0.08);
+  border:1px solid rgba(255,0,0,0.4);
+
+  color:#d63031;
+
+  animation: pulseLembur 1.2s infinite;
+}
+
+@keyframes pulseLembur{
+  0%{
+    box-shadow:0 0 0px rgba(214,48,49,0);
+  }
+  50%{
+    box-shadow:0 0 12px rgba(214,48,49,0.7);
+  }
+  100%{
+    box-shadow:0 0 0px rgba(214,48,49,0);
+  }
+}
 
 .watermark{
   text-align:center;
@@ -139,12 +165,16 @@ button{
   background:#000000;
   color:#fff;
   cursor:pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover{
+  box-shadow:0 5px 15px rgba(0,0,0,0.2);
 }
 
 #shareBtn{
   background:#000000;
   margin-top:10px;
-  color-interpolation: ;
 }
 
 .popup{
@@ -180,6 +210,8 @@ button{
   margin-top:15px;
   background:#000;
   color:#fff;
+  max-height:80vh;
+  overflow-y:auto;
 }
 
 @keyframes fadeIn{
@@ -212,6 +244,158 @@ button{
   padding:20px;
 }
 
+/* ANIMASI SHIFT */
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes glowPagi{
+  0%{text-shadow:0 0 0px rgba(255,193,7,0);}
+  50%{text-shadow:0 0 12px rgba(255,193,7,0.8);}
+  100%{text-shadow:0 0 0px rgba(255,193,7,0);}
+}
+
+@keyframes glowMalam{
+  0%{text-shadow:0 0 0px rgba(33,150,243,0);}
+  50%{text-shadow:0 0 12px rgba(33,150,243,0.8);}
+  100%{text-shadow:0 0 0px rgba(33,150,243,0);}
+}
+
+@keyframes zoomOff{
+  0%{transform:scale(0.95);opacity:0.7;}
+  50%{transform:scale(1.05);opacity:1;}
+  100%{transform:scale(1);}
+}
+
+/* CLASS TRIGGER */
+.anim-pagi{
+  animation:fadeUp 0.4s ease, glowPagi 1.2s ease;
+}
+
+.anim-malam{
+  animation:fadeUp 0.4s ease, glowMalam 1.2s ease;
+}
+
+.anim-off{
+  animation:fadeUp 0.4s ease, zoomOff 0.5s ease;
+}
+
+@keyframes flow{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* MINI CALENDAR */
+.mini-calendar{
+  display:flex;
+  overflow-x:auto;
+  gap:6px;
+  margin-top:10px;
+  padding:10px 5px;
+  transition:transform 0.3s ease;
+}
+
+.mini-calendar::-webkit-scrollbar{
+  display:none;
+}
+
+.mini-date b{
+  font-size:10px;
+}
+
+.mini-date{
+  min-width:40px;
+  padding:6px;
+  border-radius:10px;
+  text-align:center;
+  background:rgba(255,255,255,0.2);
+  border:1px solid rgba(0,0,0,0.2);
+  cursor:pointer;
+  will-change: transform;
+  transition:0.2s;
+}
+
+.mini-date.active{
+  background:#000;
+  color:#fff;
+  transform:scale(1.1);
+}
+
+.mini-date.active.mini-today{
+  background:#00b894;
+  color:#fff;
+}
+
+.mini-date small{
+  display:block;
+  font-size:8px;
+  text-transform: uppercase;
+}
+
+/* preview shift warna */
+.mini-off{border-bottom:3px solid #636e72;}
+.mini-pagi{border-bottom:3px solid #e1b12c;}
+.mini-malam{border-bottom:3px solid #0984e3;}
+
+.mini-wrapper{
+  overflow:hidden;
+}
+
+/* animasi arah */
+.slide-left{
+  transform:translateX(-40px);
+  opacity:0;
+}
+
+.slide-right{
+  transform:translateX(40px);
+  opacity:0;
+}
+
+.loading{
+  animation: shimmer 1s infinite linear;
+}
+
+@keyframes shimmer{
+  0%{opacity:0.4}
+  50%{opacity:1}
+  100%{opacity:0.4}
+}
+
+body.blur-bg::before{
+  filter: blur(120px);
+  opacity:0.5;
+  transition:0.3s;
+}
+
+#helpBtn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:#000;
+  color:#fff;
+  font-size:15px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  box-shadow:0 5px 20px rgba(0,0,0,0.3);
+}
+
+#helpBtn:hover{
+  transform:scale(1.1);
+}
 </style>
 </head>
 
@@ -224,14 +408,42 @@ button{
 </div>
     <div id="tutorialPopup" class="popup">
   <div class="popup-content">
-    <h3>📌 Cara Menggunakan</h3>
-    <p>
-      1. Pilih grup kerja (A / B / C)<br>
-      2. Pilih tanggal<br>
-      3. Geser layar kiri/kanan untuk ubah tanggal<br>
-      4. Klik "Cek Jadwal" untuk melihat hasil<br><br>
-      🔥 Jika hari libur nasional, maka akan muncul status lembur
-    </p>
+    <h3>📖 TUTORIAL & FITUR </h3>
+    <p<p style="text-align:left; font-size:13px; line-height:1.6;">
+
+<b>📌 Cara Dasar:</b><br>
+• Pilih grup kerja (A / B / C)<br>
+• Pilih tanggal<br>
+• Klik <b>"Cek Jadwal"</b><br><br>
+
+<b>👆 Gesture Navigation (Swipe Control):</b><br>
+• Geser kiri / kanan untuk ubah tanggal<br>
+• Swipe cepat = <b>Inertia Swipe</b> (lompat lebih dari 1 hari)<br><br>
+
+<b>📅 Mini Calendar Preview:</b><br>
+• Menampilkan 7 hari sekitar tanggal aktif<br>
+• Warna menunjukkan jenis shift<br>
+• Klik tanggal untuk memilih langsung<br><br>
+
+<b>🎨 Dynamic UI & Animation:</b><br>
+• <b>Dynamic Background</b> (berubah sesuai shift)<br>
+• <b>Fade + Glow Animation</b> saat hasil muncul<br>
+• <b>Blur Transition Effect</b> saat loading<br><br>
+
+<b>🚨 Smart Detection System:</b><br>
+• <b>Auto Holiday Detection</b> (libur nasional → LEMBUR)<br>
+• <b>Today Marker</b> (penanda hari ini)<br><br>
+
+<b>💾 Auto Save System:</b><br>
+• Data grup & tanggal tersimpan otomatis<br>
+• Tidak perlu input ulang saat membuka kembali<br><br>
+
+<b>📤 Quick Share Feature:</b><br>
+• Kirim hasil langsung ke WhatsApp<br><br>
+
+<b></b>©AprilhxnProject2026</b>
+
+</p>
     <button onclick="tutupTutorial()">Mengerti</button>
   </div>
 </div>
@@ -252,21 +464,106 @@ button{
 </div>
 
 <div class="group">
-<label>PILIH TANGGAL</label>
-<input type="date" id="date">
+  <label>PILIH TANGGAL</label>
+  <input type="date" id="date">
+
+  <div class="mini-wrapper">
+    <div id="miniCalendar" class="mini-calendar"></div>
+  </div>
 </div>
 
 <button onclick="cek()">CEK JADWAL</button>
 
 <div id="result" class="result"></div>
 <button id="shareBtn" style="display:none;">BAGIKAN KE WHATSAPP</button>
-
 </div>
 
-<div class="watermark">© AprilhxnProject</div>
+<button id="helpBtn">❓</button>
+
+<div class="watermark">©AprilhxnProject</div>
 </div>
 
 <script>
+
+const swipeSound = new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3");
+swipeSound.volume = 0.2; // biar halus
+
+function generateMiniCalendar(direction="none"){
+  const container = document.getElementById("miniCalendar");
+
+  // animasi keluar
+  if(direction==="left"){
+    container.classList.add("slide-left");
+  }
+  if(direction==="right"){
+    container.classList.add("slide-right");
+  }
+
+  setTimeout(()=>{
+
+    container.classList.remove("slide-left","slide-right");
+    container.innerHTML = "";
+
+    const selectedDate = new Date(document.getElementById("date").value);
+
+    for(let i=-3;i<=3;i++){
+      const d = new Date(selectedDate);
+      d.setDate(d.getDate()+i);
+
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,'0');
+      const day = String(d.getDate()).padStart(2,'0');
+      const fullDate = `${y}-${m}-${day}`;
+
+      const namaHari = getNamaHari(fullDate);
+
+      const diff=Math.floor((d-base)/(1000*60*60*24));
+      let idx=(diff+offset[document.getElementById("group").value])%6;
+      if(idx<0) idx+=6;
+
+      const shift = pola[idx];
+
+      let shiftClass="";
+      if(shift.includes("OFF")) shiftClass="mini-off";
+      if(shift.includes("PAGI")) shiftClass="mini-pagi";
+      if(shift.includes("MALAM")) shiftClass="mini-malam";
+
+      const el = document.createElement("div");
+      el.className = "mini-date "+shiftClass;
+
+      if(fullDate === document.getElementById("date").value){
+        el.classList.add("active");
+      }
+      if(fullDate === getTodayLocal()){
+  el.classList.add("mini-today");
+}
+
+      el.innerHTML = `
+        <small>${namaHari.slice(0,3).toUpperCase()}</small>
+        <b>${day}</b>
+      `;
+
+      el.onclick = function(){
+        document.getElementById("date").value = fullDate;
+        cek();
+        generateMiniCalendar();
+      };
+
+      container.appendChild(el);
+    }
+    const active = container.querySelector(".active");
+
+if(active){
+  active.scrollIntoView({
+    behavior:"smooth",
+    inline:"center",
+    block:"nearest"
+  });
+}
+
+  },150);
+}
+
 
 function cekDevice(){
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -295,26 +592,70 @@ function tutupTutorial(){
 }
 
 // SWIPE
-let startX=0,endX=0;
+let startX=0,endX=0,startTime=0,endTime=0;
 
-document.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
+document.addEventListener("touchstart",e=>{
+  startX = e.touches[0].clientX;
+  startTime = new Date().getTime();
+});
+
 document.addEventListener("touchend",e=>{
-  endX=e.changedTouches[0].clientX;
+  endX = e.changedTouches[0].clientX;
+  endTime = new Date().getTime();
   handleSwipe();
 });
 
 function handleSwipe(){
-  const diff=startX-endX;
+  const diff = startX - endX;
+  const time = endTime - startTime;
 
+  const speed = Math.abs(diff) / time; // px per ms
+
+  const card = document.querySelector(".card");
+  
   if(Math.abs(diff)>50){
-    document.body.style.transform="scale(0.98)";
-    setTimeout(()=>{document.body.style.transform="scale(1)";},100);
+  swipeSound.currentTime = 0;
+  swipeSound.play().catch(()=>{}); // biar aman di mobile
+}
+
+  if(Math.abs(diff) > 40){
+  card.style.transform="scale(0.96)";
+  setTimeout(()=>{card.style.transform="scale(1)"},120);
+}
+  
+  if(Math.abs(diff)>50){
+  
+  card.style.transform = diff > 0 
+    ? "translateX(-10px) scale(0.97)" 
+    : "translateX(10px) scale(0.97)";
+
+  setTimeout(()=>{
+    card.style.transform="translateX(0) scale(1)";
+  },120);
+}
+
+  // 🔥 inertia logic
+  if(diff > 50){
+    ubahTanggal(1);
+
+    if(speed > 0.5){ // swipe cepat
+      setTimeout(()=>ubahTanggal(1),120);
+    }
   }
 
-  if(diff>50)ubahTanggal(1);
-  if(diff<-50)ubahTanggal(-1);
+  if(diff < -50){
+    ubahTanggal(-1);
 
-  if(navigator.vibrate){navigator.vibrate(30);}
+    if(speed > 0.5){
+      setTimeout(()=>ubahTanggal(-1),120);
+    }
+  }
+
+  if(navigator.vibrate){
+  if(Math.abs(diff) > 50){
+    navigator.vibrate([15, 30, 15]); // pola getar: getar - jeda - getar
+  }
+}
 }
 
 // DATA
@@ -350,7 +691,7 @@ input.min=today;
 
 // ICON
 function icon(s){
- if(s.includes("OFF"))return"🛌";
+ if(s.includes("OFF"))return"💤";
  if(s.includes("PAGI"))return"☀️";
  if(s.includes("MALAM"))return"🌙";
 }
@@ -390,20 +731,45 @@ function cek(){
  bg(shift);
 
  res.style.display="block";
- document.getElementById("shareBtn").style.display="block";
+document.getElementById("shareBtn").style.display="block";
 
- // animasi fade
- res.style.opacity="0";
- setTimeout(()=>{res.style.opacity="1";},100);
+document.body.classList.add("blur-bg");
 
- res.innerHTML=
- `<b>Grup :</b> ${g}<br>
+// loading + fade
+res.style.opacity="0";
+res.innerHTML = '<div class="loading">Loading...</div>';
+
+setTimeout(()=>{
+
+  let animClass = "";
+
+  if(shift.includes("PAGI")) animClass = "anim-pagi";
+  if(shift.includes("MALAM")) animClass = "anim-malam";
+  if(shift.includes("OFF")) animClass = "anim-off";
+
+  res.innerHTML =
+  `<b>Grup :</b> ${g}<br>
   <b>Tanggal :</b> ${getNamaHari(tanggal)}, ${formatTanggal(tanggal)}<br>
-  <b>Shift :</b> <span class="${warna(shift)}"><b>${icon(shift)} ${shift}</b></span>
+  <b>Shift :</b> 
+  <span class="${warna(shift)} ${animClass}">
+    <b>${icon(shift)} ${shift}</b>
+  </span>
   ${isToday?`<div><b>📍 Hari Ini</b></div>`:""}
-  ${libur?`<div class="lembur">🔥 LEMBUR (Hari Libur Nasional) - ${libur}</div>`:""}`;
-}
+  ${libur?`<div class="lembur">🚨🔥 LEMBUR (Hari Libur Nasional) - ${libur}</div>`:""}`;
 
+  res.style.opacity="1";
+
+},300);
+
+setTimeout(()=>{
+  document.body.classList.remove("blur-bg");
+},600);
+
+
+// ✅ TAMBAHKAN INI (STATE MEMORY)
+ localStorage.setItem("group", g);
+ localStorage.setItem("tanggal", tanggal);
+}
 // SWIPE DATE
 function ubahTanggal(step){
   const current=new Date(input.value);
@@ -412,14 +778,42 @@ function ubahTanggal(step){
   if(current<new Date(today))return;
 
   input.value=current.toISOString().split("T")[0];
-  cek();
-}
 
+  cek();
+
+  if(step>0){
+    generateMiniCalendar("left");
+  }else{
+    generateMiniCalendar("right");
+  }
+}
 // AUTO LOAD
 window.onload=function(){
   cekDevice();
+  // ✅ TAMBAHKAN DI SINI
+  const savedDate = localStorage.getItem("tanggal");
+  const savedGroup = localStorage.getItem("group");
+
+  if(savedDate){
+    document.getElementById("date").value = savedDate;
+  }
+
+  if(savedGroup){
+    document.getElementById("group").value = savedGroup;
+  }
   cek();
   tampilkanTutorial();
+  generateMiniCalendar(); // ⬅️ penting
+  
+  // ⬇️ TARUH DI SINI (PALING AMAN)
+  document.getElementById("group").addEventListener("change", cek);
+ document.getElementById("date").addEventListener("change", function(){
+  setTimeout(()=>cek(),100);
+});
+document.getElementById("helpBtn").addEventListener("click", function(){
+  document.getElementById("tutorialPopup").style.display="flex";
+  document.body.style.overflow="hidden";
+});
 }
 
 // SHARE
@@ -442,10 +836,10 @@ document.getElementById("shareBtn").onclick = function(){
   const isLibur = namaLibur !== undefined;
 
   let text =
-`📅 GL Schedule Checker V2.2
+`💻 GL Schedule Checker V2.2
 
 👤 Grup : ${g}
-📆 ${namaHari}, ${tanggalFormat}
+🗓️ ${namaHari}, ${tanggalFormat}
 ⏰ Shift : ${icon(shift)} ${shift}
 `;
 
