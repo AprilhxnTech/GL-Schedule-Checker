@@ -196,22 +196,57 @@ button:hover{
 }
 
 .popup-content{
+    position: relative;
+    max-height:80vh;
+    overflow-y:auto;
   background: rgba(255,255,255,0.2);
   backdrop-filter: blur(12px);
   padding:25px;
+  padding-top: 40px;
   border-radius:16px;
   width:90%;
   max-width:320px;
   text-align:center;
   animation: fadeIn 0.4s ease;
 }
+.popup-content a{
+  text-decoration:none;
+  display:block;
+}
+
+/* tombol X */
+#closePopup{
+  position:absolute;
+  top:5px;
+  width:auto;        /* ⬅️ penting */
+  margin:0;          /* ⬅️ penting */
+  display:block;     /* biarkan */
+  padding:5px;
+  right: 10px;
+  left:auto;
+  background:none;
+  border:none;
+  font-size:18px;
+  color:#000;
+  cursor:pointer;
+}
+
+/* tombol kritik */
+.feedbackBtn{
+  width:100%;
+  margin-top:10px;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:linear-gradient(135deg,#e84393,#fd79a8);
+  color:#fff;
+  font-weight:bold;
+}
 
 .popup-content button{
   margin-top:15px;
   background:#000;
   color:#fff;
-  max-height:80vh;
-  overflow-y:auto;
 }
 
 @keyframes fadeIn{
@@ -332,6 +367,7 @@ button:hover{
 .mini-date.active.mini-today{
   background:#00b894;
   color:#fff;
+  box-shadow:0 0 10px rgba(0,184,148,0.8);
 }
 
 .mini-date small{
@@ -396,6 +432,22 @@ body.blur-bg::before{
 #helpBtn:hover{
   transform:scale(1.1);
 }
+
+.spinner{
+  width:25px;
+  height:25px;
+  margin:0 auto 8px;
+  border:3px solid rgba(0,0,0,0.2);
+  border-top:3px solid #000;
+  border-radius:50%;
+  animation: spin 0.3s linear infinite;
+}
+
+@keyframes spin{
+  0%{transform:rotate(0deg);}
+  100%{transform:rotate(360deg);}
+}
+
 </style>
 </head>
 
@@ -407,47 +459,55 @@ body.blur-bg::before{
   </div>
 </div>
     <div id="tutorialPopup" class="popup">
-  <div class="popup-content">
-    <h3>📖 TUTORIAL & FITUR </h3>
-    <p<p style="text-align:left; font-size:13px; line-height:1.6;">
+ <div class="popup-content">
 
-<b>📌 Cara Dasar:</b><br>
-• Pilih grup kerja (A / B / C)<br>
-• Pilih tanggal<br>
-• Klik <b>"Cek Jadwal"</b><br><br>
+  <button id="closePopup">✕</button>
 
-<b>👆 Gesture Navigation (Swipe Control):</b><br>
-• Geser kiri / kanan untuk ubah tanggal<br>
-• Swipe cepat = <b>Inertia Swipe</b> (lompat lebih dari 1 hari)<br><br>
+  <h3>🚀 FITUR & CARA PENGGUNAAN</h3>
+  
+  <hr>
 
-<b>📅 Mini Calendar Preview:</b><br>
-• Menampilkan 7 hari sekitar tanggal aktif<br>
-• Warna menunjukkan jenis shift<br>
-• Klik tanggal untuk memilih langsung<br><br>
+  <p style="text-align:left; font-size:13px; line-height:1.6;">
 
-<b>🎨 Dynamic UI & Animation:</b><br>
-• <b>Dynamic Background</b> (berubah sesuai shift)<br>
-• <b>Fade + Glow Animation</b> saat hasil muncul<br>
-• <b>Blur Transition Effect</b> saat loading<br><br>
+  <b>📌 Cara Dasar:</b><br>
+  • Pilih grup kerja (A / B / C)<br>
+  • Pilih tanggal<br>
+  • Klik <b>"Cek Jadwal"</b><br><br>
 
-<b>🚨 Smart Detection System:</b><br>
-• <b>Auto Holiday Detection</b> (libur nasional → LEMBUR)<br>
-• <b>Today Marker</b> (penanda hari ini)<br><br>
+  <b>👆 Gesture Navigation (Swipe Control):</b><br>
+  • Geser kiri / kanan untuk ubah tanggal<br>
+  • Swipe cepat = <b>Inertia Swipe</b><br><br>
 
-<b>💾 Auto Save System:</b><br>
-• Data grup & tanggal tersimpan otomatis<br>
-• Tidak perlu input ulang saat membuka kembali<br><br>
+  <b>📅 Mini Calendar Preview:</b><br>
+  • Preview 7 hari sekitar tanggal<br>
+  • Klik tanggal untuk memilih<br><br>
 
-<b>📤 Quick Share Feature:</b><br>
-• Kirim hasil langsung ke WhatsApp<br><br>
+  <b>🎨 Dynamic UI & Animation:</b><br>
+  • Dynamic Background<br>
+  • Fade + Glow Animation<br>
+  • Blur Transition Effect<br><br>
 
-<b></b>©AprilhxnProject2026</b>
+  <b>🚨 Smart Detection:</b><br>
+  • Auto Holiday Detection → LEMBUR<br>
+  • Today Marker<br><br>
 
-</p>
-    <button onclick="tutupTutorial()">Mengerti</button>
-  </div>
+  <b>💾 Auto Save System:</b><br>
+  • Data tersimpan otomatis<br><br>
+
+  <b>📤 Quick Share:</b><br>
+  • Share ke WhatsApp<br>
+
+  <hr>
+
+ 
+  </p>
+
+  <a href="https://instagram.com/aprilhxn" target="_blank">
+    <button class="feedbackBtn">📷 FOLLOW ME ON INSTAGRAM</button>
+  </a>
+
 </div>
-
+</div>
 <div class="main">
 <div class="card">
 
@@ -580,15 +640,21 @@ function tampilkanTutorial(){
   const sudah = localStorage.getItem("tutorial_sudah");
 
   if(!sudah){
-    document.getElementById("tutorialPopup").style.display="flex";
-    document.body.style.overflow="hidden"; // ⬅️ lock scroll
+    toggleTutorial();
   }
 }
 
-function tutupTutorial(){
-  document.getElementById("tutorialPopup").style.display="none";
-  document.body.style.overflow="auto"; // ⬅️ buka lagi
-  localStorage.setItem("tutorial_sudah","true");
+function toggleTutorial(){
+  const popup = document.getElementById("tutorialPopup");
+
+  if(popup.style.display === "flex"){
+    popup.style.display = "none";
+    document.body.style.overflow="auto";
+    localStorage.setItem("tutorial_sudah","true");
+  }else{
+    popup.style.display = "flex";
+    document.body.style.overflow="hidden";
+  }
 }
 
 // SWIPE
@@ -737,7 +803,12 @@ document.body.classList.add("blur-bg");
 
 // loading + fade
 res.style.opacity="0";
-res.innerHTML = '<div class="loading">Loading...</div>';
+res.innerHTML = `
+<div class="loading-box">
+  <div class="spinner"></div>
+  <div>🔄 MENGHITUNG JADWAL...</div>
+</div>
+`;
 
 setTimeout(()=>{
 
@@ -759,11 +830,11 @@ setTimeout(()=>{
 
   res.style.opacity="1";
 
-},300);
+},800);
 
 setTimeout(()=>{
   document.body.classList.remove("blur-bg");
-},600);
+},800);
 
 
 // ✅ TAMBAHKAN INI (STATE MEMORY)
@@ -790,7 +861,7 @@ function ubahTanggal(step){
 // AUTO LOAD
 window.onload=function(){
   cekDevice();
-  // ✅ TAMBAHKAN DI SINI
+
   const savedDate = localStorage.getItem("tanggal");
   const savedGroup = localStorage.getItem("group");
 
@@ -801,19 +872,19 @@ window.onload=function(){
   if(savedGroup){
     document.getElementById("group").value = savedGroup;
   }
+
   cek();
   tampilkanTutorial();
-  generateMiniCalendar(); // ⬅️ penting
-  
-  // ⬇️ TARUH DI SINI (PALING AMAN)
+  generateMiniCalendar();
+
   document.getElementById("group").addEventListener("change", cek);
- document.getElementById("date").addEventListener("change", function(){
-  setTimeout(()=>cek(),100);
-});
-document.getElementById("helpBtn").addEventListener("click", function(){
-  document.getElementById("tutorialPopup").style.display="flex";
-  document.body.style.overflow="hidden";
-});
+  document.getElementById("date").addEventListener("change", function(){
+    setTimeout(()=>cek(),100);
+  });
+
+  // ✅ VERSI BARU (toggle)
+  document.getElementById("helpBtn").addEventListener("click", toggleTutorial);
+  document.getElementById("closePopup").addEventListener("click", toggleTutorial);
 }
 
 // SHARE
@@ -854,6 +925,7 @@ https://schedule-checker.netlify.app/
   const url = "https://wa.me/?text=" + encodeURIComponent(text);
   window.open(url, "_blank");
 };
+
 </script>
 
 </body>
